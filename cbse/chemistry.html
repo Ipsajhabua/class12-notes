@@ -11,4 +11,22 @@
         📥 Download Chemistry Notes (PDF)
     </a>
 </body>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const instagramUrl = "https://www.instagram.com/ips_academy_jhabua"; 
+
+      const noteLinks = document.querySelectorAll('a[href$=".pdf"]');
+
+      noteLinks.forEach(link => {
+          link.addEventListener('click', function(e) {
+              e.preventDefault();
+              const downloadUrl = this.href;
+              window.open(instagramUrl, '_blank');
+              setTimeout(() => {
+                  window.location.href = downloadUrl;
+              }, 100); 
+          });
+      });
+  });
+</script>
 </html>
