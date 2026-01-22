@@ -2,31 +2,89 @@
 <html>
 <head>
     <title>Chemistry Notes - MP Board - Class 12</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 10px;
+        }
+        h2 {
+            text-align: center;
+        }
+        #pdf-container {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+        }
+        canvas {
+            width: 100%;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        .download-btn {
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 18px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body style="font-family: Arial; padding: 20px;">
-    <h1>Class 12 - Chemistry Notes (MP Board)</h1>
-    <p>Click the link below to download the notes:</p>
 
-    <a href="../mp-pdf/chemistry-notes.pdf" download style="font-size:20px;">
-        📥 Download Chemistry Notes (PDF)
-    </a>
-</body>
-    <script>
-  document.addEventListener('DOMContentLoaded', function() {
-      const instagramUrl = "https://www.instagram.com/ips_academy_jhabua"; 
+<body>
 
-      const noteLinks = document.querySelectorAll('a[href$=".pdf"]');
+<h2>Class 12 – Chemistry Notes (MP Board)</h2>
 
-      noteLinks.forEach(link => {
-          link.addEventListener('click', function(e) {
-              e.preventDefault();
-              const downloadUrl = this.href;
-              window.open(instagramUrl, '_blank');
-              setTimeout(() => {
-                  window.location.href = downloadUrl;
-              }, 100); 
-          });
-      });
-  });
+<a id="downloadBtn" class="download-btn" href="../mp-pdf/chemistry-notes.pdf">
+    📥 Download Chemistry Notes (PDF)
+</a>
+
+<div id="pdf-container"></div>
+
+<script>
+    /* ========= PDF VIEWER ========= */
+    const pdfUrl = "../mp-pdf/chemistry-notes.pdf";
+
+    pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+        const container = document.getElementById("pdf-container");
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+            pdf.getPage(i).then(page => {
+                const viewport = page.getViewport({ scale: 1.5 });
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                container.appendChild(canvas);
+
+                page.render({
+                    canvasContext: ctx,
+                    viewport: viewport
+                });
+            });
+        }
+    });
+
+    /* ========= INSTAGRAM REDIRECT + DOWNLOAD ========= */
+    document.getElementById("downloadBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const pdfLink = this.href;
+        const instagramUrl = "https://www.instagram.com/ips_academy_jhabua";
+
+        window.open(instagramUrl, "_blank");
+
+        setTimeout(() => {
+            window.location.href = pdfLink;
+        }, 300);
+    });
 </script>
+
+</body>
 </html>
