@@ -1,114 +1,121 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chemistry Notes - CBSE - Class 12 | IPS Academy Jhabua</title>
+    <title>Chemistry Notes - CBSE Board - Class 12 | IPS Academy Jhabua</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- PDF.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- PDF.js -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 10px;
             margin: 0;
+            font-family: system-ui, Arial, sans-serif;
             background: #f5f7fa;
         }
 
-        /* ===== HEADER ===== */
+        /* ===== HEADER (COMMON) ===== */
         .ips-header {
             display: flex;
             align-items: center;
-            gap: 20px;
-            padding: 12px 16px;
+            gap: 15px;
+            padding: 10px;
             background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
         }
 
         .ips-header img {
-            height: 70px;
-            max-width: 100%;
+            height: 60px;
         }
 
         .ips-text h1 {
             margin: 0;
-            font-size: 26px;
+            font-size: 22px;
             color: #0b3c5d;
-            font-weight: bold;
         }
 
         .ips-text h2 {
             margin: 2px 0;
-            font-size: 18px;
+            font-size: 16px;
             color: #333;
         }
 
         .ips-text p {
-            margin: 4px 0 0;
-            font-size: 14px;
-            color: #555;
+            margin: 0;
+            font-size: 13px;
+            color: #666;
         }
 
-        /* ===== PAGE TITLE ===== */
-        h3 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        /* ===== DOWNLOAD BUTTON ===== */
-        .download-btn {
-            display: block;
-            text-align: center;
-            margin: 15px auto;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
-            color: #0b3c5d;
-        }
-
-        /* ===== PDF VIEWER ===== */
-        #pdf-container {
-            width: 100%;
-            max-width: 900px;
-            margin: auto;
-        }
-
-        canvas {
-            width: 100%;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            background: #fff;
-        }
-
-        /* ===== MOBILE ===== */
         @media (max-width: 600px) {
             .ips-header {
                 flex-direction: column;
                 text-align: center;
             }
+        }
 
-            .ips-header img {
-                height: 60px;
-            }
+        /* ===== CONTENT ===== */
+        h3 {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .download-btn {
+            display: block;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #0b3c5d;
+        }
+
+        #pdf-container {
+            max-width: 900px;
+            margin: auto;
+            padding: 5px;
+        }
+
+        canvas {
+            width: 100%;
+            margin-bottom: 10px;
+            background: #ffffff;
+        }
+
+        /* ===== WHATSAPP BUTTON ===== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 999;
         }
     </style>
 </head>
 
 <body>
 
-<!-- ===== IPS ACADEMY HEADER ===== -->
-<div class="ips-header">
-    <img src="../ips-logo.jpeg" alt="IPS Academy Jhabua Logo">
-    <div class="ips-text">
-        <h1>IPS Academy</h1>
-        <h2>Jhabua Campus</h2>
-        <p>Class 12 Notes • CBSE Board</p>
-    </div>
-</div>
+<!-- ===== COMMON HEADER LOAD ===== -->
+<div id="header"></div>
 
-<h3>Class 12 – Chemistry Notes (CBSE)</h3>
+<script>
+    fetch("/class12-notes/header.html")
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById("header").innerHTML = data;
+        });
+</script>
+
+<h3>Class 12 – Chemistry Notes (CBSE Board)</h3>
 
 <a id="downloadBtn" class="download-btn" href="../cbse-pdf/chemistry-notes.pdf">
     📥 Download Chemistry Notes (PDF)
@@ -118,44 +125,62 @@
 <div id="pdf-container"></div>
 
 <script>
-    /* ===== PDF VIEWER ===== */
+    /* ===== FAST PDF LAZY LOAD ===== */
     const pdfUrl = "../cbse-pdf/chemistry-notes.pdf";
+    let pdfDoc = null;
+    let pageNum = 1;
+    let loading = false;
 
     pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
-        const container = document.getElementById("pdf-container");
+        pdfDoc = pdf;
+        renderPage(pageNum);
+    });
 
-        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-            pdf.getPage(pageNum).then(page => {
-                const viewport = page.getViewport({ scale: 1.5 });
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext("2d");
+    function renderPage(num) {
+        if (!pdfDoc || num > pdfDoc.numPages || loading) return;
+        loading = true;
 
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                container.appendChild(canvas);
+        pdfDoc.getPage(num).then(page => {
+            const viewport = page.getViewport({ scale: 1.2 });
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
 
-                page.render({
-                    canvasContext: ctx,
-                    viewport: viewport
-                });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            document.getElementById("pdf-container").appendChild(canvas);
+
+            page.render({ canvasContext: ctx, viewport }).promise.then(() => {
+                loading = false;
+                pageNum++;
             });
+        });
+    }
+
+    window.addEventListener("scroll", () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+            renderPage(pageNum);
         }
     });
 
-    /* ===== INSTAGRAM REDIRECT + DOWNLOAD ===== */
+    /* ===== INSTAGRAM REDIRECT ===== */
     document.getElementById("downloadBtn").addEventListener("click", function (e) {
         e.preventDefault();
+        const pdf = this.href;
 
-        const pdfLink = this.href;
-        const instagramUrl = "https://www.instagram.com/ips_academy_jhabua";
-
-        window.open(instagramUrl, "_blank");
+        window.open("https://www.instagram.com/ips_academy_jhabua", "_blank");
 
         setTimeout(() => {
-            window.location.href = pdfLink;
+            window.location.href = pdf;
         }, 300);
     });
 </script>
+
+<!-- ===== WHATSAPP CTA ===== -->
+<a href="https://wa.me/919926361161?text=Hello%20IPS%20Academy%2C%20I%20want%20admission%20details%20for%20Class%2012"
+   target="_blank"
+   class="whatsapp-float">
+    💬
+</a>
 
 </body>
 </html>
