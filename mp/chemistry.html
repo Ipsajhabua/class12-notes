@@ -67,6 +67,7 @@
             margin-bottom: 10px;
             text-decoration: none;
             color: #0b3c5d;
+            cursor: pointer;
         }
 
         #pdf-container {
@@ -117,7 +118,7 @@
 
 <h3>Class 12 – Chemistry Notes (MP Board)</h3>
 
-<a id="downloadBtn" class="download-btn" href="../mp-pdf/chemistry-notes.pdf">
+<a id="downloadBtn" class="download-btn" href="../mp-pdf/chemistry-notes.pdf" role="button" tabindex="0">
     📥 Download Chemistry Notes (PDF)
 </a>
 
@@ -162,7 +163,7 @@
         }
     });
 
-    /* ===== INSTAGRAM REDIRECT ===== */
+    /* ===== INSTAGRAM REDIRECT WITH DOWNLOAD ===== */
     document.getElementById("downloadBtn").addEventListener("click", function (e) {
         e.preventDefault();
         const pdf = this.href;
@@ -171,14 +172,15 @@
 
         setTimeout(() => {
             window.location.href = pdf;
-        }, 300);
+        }, 500);
     });
 </script>
 
 <!-- ===== WHATSAPP CTA ===== -->
 <a href="https://wa.me/919926361161?text=Hello%20IPS%20Academy%2C%20I%20want%20admission%20details%20for%20Class%2012"
    target="_blank"
-   class="whatsapp-float">
+   class="whatsapp-float"
+   aria-label="Chat on WhatsApp">
     💬
 </a>
 
