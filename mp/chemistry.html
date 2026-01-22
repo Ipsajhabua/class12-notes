@@ -163,12 +163,18 @@
         }
     });
 
-    /* ===== INSTAGRAM REDIRECT WITH DOWNLOAD ===== */
+    /* ===== INSTAGRAM REDIRECT WITH POPUP BLOCKER CHECK ===== */
     document.getElementById("downloadBtn").addEventListener("click", function (e) {
         e.preventDefault();
         const pdf = this.href;
 
-        window.open("https://www.instagram.com/ips_academy_jhabua", "_blank");
+        const instaWindow = window.open("https://www.instagram.com/ips_academy_jhabua", "_blank");
+
+        if (!instaWindow) {
+            alert("Please enable popups for this site to visit our Instagram page.");
+            window.location.href = pdf;
+            return;
+        }
 
         setTimeout(() => {
             window.location.href = pdf;
@@ -177,7 +183,7 @@
 </script>
 
 <!-- ===== WHATSAPP CTA ===== -->
-<a href="https://wa.me/919926361161?text=Hello%20IPS%20Academy%2C%20I%20want%20admission%20details%20for%20Class%2012"
+<a href="https://wa.me/919926361161?text=Hello%20IPS%20Academy%2C%20I%20want%20admission%20details%20for%20college%201styear"
    target="_blank"
    class="whatsapp-float"
    aria-label="Chat on WhatsApp">
