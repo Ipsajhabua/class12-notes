@@ -1,50 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>MP Board Student Registration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #000;
-            color: #fff;
+        /* --- GLOBAL THEME --- */
+        :root {
+            --primary: #0d47a1;     /* Deep Blue */
+            --light: #f4f6f8;       /* Light Grey Background */
+            --dark: #222;
         }
 
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--light);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Full viewport height */
+        }
+
+        /* --- 1. CONSISTENT NAVBAR --- */
+        nav {
+            background: white;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-shrink: 0; /* Prevents navbar from shrinking */
+            z-index: 100;
+        }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 45px; width: auto; }
+        .brand-text { font-size: 20px; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+
+        /* --- 2. PAGE HEADER --- */
         .header {
             text-align: center;
-            padding: 15px;
-            background: #1f1f1f;
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            flex-shrink: 0;
         }
 
         .header h2 {
-            margin-bottom: 5px;
+            margin: 0 0 5px 0;
+            color: var(--primary);
         }
 
         .header p {
+            margin: 0;
             font-size: 14px;
-            color: #ccc;
+            color: #666;
+        }
+
+        /* --- 3. GOOGLE FORM CONTAINER --- */
+        .iframe-container {
+            flex-grow: 1; /* Takes up all remaining space */
+            width: 100%;
+            overflow: hidden; 
         }
 
         iframe {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             border: none;
+            display: block;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="header">
-        <h2>MP Board Student Registration</h2>
-        <p>Please fill the form to get MP Board notes</p>
-    </div>
+    <nav>
+        <div class="logo-area">
+            <img src="logo.png" alt="IPS Logo" class="logo-img" onerror="this.style.display='none'">
+            <span class="brand-text">IPS Academy</span>
+        </div>
+    </nav>
 
-    <iframe 
-        src="https://docs.google.com/forms/d/e/1FAIpQLSfOR_xzSDx-GzSbLYiWsz7Ll_mNpkM_-WelTzUyZ5tgSyugOw/viewform?usp=header">
-    </iframe>
+    <!-- <div class="header">
+        <h2>MP Board Student Registration</h2>
+        <p>Please fill the form below to get MP Board notes.</p>
+    </div> -->
+
+    <div class="iframe-container">
+        <iframe 
+            src="https://docs.google.com/forms/d/e/1FAIpQLSfOR_xzSDx-GzSbLYiWsz7Ll_mNpkM_-WelTzUyZ5tgSyugOw/viewform?embedded=true">
+            Loading...
+        </iframe>
+    </div>
 
 </body>
 </html>
