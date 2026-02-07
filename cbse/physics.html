@@ -1,161 +1,230 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Physics Notes - CBSE - Class 12 | IPS Academy Jhabua</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Notes | IPS Academy</title>
+    <link rel="icon" type="image/png" href="logo.png">
 
-    <!-- PDF.js CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 10px;
-            margin: 0;
-            background: #f5f7fa;
+        :root {
+            --primary: #1f3c88;       /* Academy Blue */
+            --accent: #ffcc00;        /* Academy Yellow */
+            --bg-color: #f4f7fa;      /* Light Grey Background */
+            --text-dark: #333333;
+            --card-white: #ffffff;
         }
 
-        /* ===== HEADER ===== */
-        .ips-header {
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- 1. NAVBAR --- */
+        nav {
+            background: white;
+            height: 70px;
             display: flex;
             align-items: center;
-            gap: 20px;
-            padding: 12px 16px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .ips-header img {
-            height: 70px;
-            max-width: 100%;
+        .nav-content { display: flex; align-items: center; gap: 12px; }
+        .nav-logo { height: 45px; width: auto; }
+        .brand-text { font-size: 20px; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+
+        /* --- 2. HEADER SECTION --- */
+        .header {
+            background: linear-gradient(135deg, #1f3c88 0%, #0d265e 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px 80px; /* Extra padding for overlap */
+            clip-path: ellipse(150% 100% at 50% 0%); /* Curved effect */
+            position: relative;
+            z-index: 10;
         }
 
-        .ips-text h1 {
+        .header h2 {
             margin: 0;
             font-size: 26px;
-            color: #0b3c5d;
-            font-weight: bold;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        .ips-text h2 {
-            margin: 2px 0;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .ips-text p {
-            margin: 4px 0 0;
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.85;
             font-size: 14px;
-            color: #555;
+            font-weight: 400;
         }
 
-        /* ===== PAGE TITLE ===== */
-        h3 {
-            text-align: center;
-            margin-bottom: 10px;
+        /* --- 3. CONTENT AREA --- */
+        .content {
+            flex: 1;
+            padding: 0 20px;
+            margin-top: -50px; /* Pulls content up to overlap header */
+            position: relative;
+            z-index: 20;
         }
 
-        /* ===== DOWNLOAD BUTTON ===== */
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: var(--card-white);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(31, 60, 136, 0.1);
+            overflow: hidden; /* Clips the canvas corners */
+            padding: 30px;
+        }
+
+        /* --- DOWNLOAD BUTTON --- */
         .download-btn {
             display: block;
-            text-align: center;
-            margin: 15px auto;
-            font-size: 18px;
-            font-weight: bold;
+            background: var(--accent);
+            color: #000;
             text-decoration: none;
-            color: #0b3c5d;
+            text-align: center;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin: 0 auto 30px auto;
+            width: fit-content;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* ===== PDF VIEWER ===== */
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.4);
+            background: #ffdb4d;
+        }
+
+        /* --- PDF VIEWER --- */
         #pdf-container {
             width: 100%;
-            max-width: 900px;
-            margin: auto;
+            text-align: center;
         }
 
         canvas {
-            width: 100%;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            background: #fff;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
         }
 
-        /* ===== MOBILE ===== */
-        @media (max-width: 600px) {
-            .ips-header {
-                flex-direction: column;
-                text-align: center;
-            }
+        /* --- FOOTER --- */
+        .footer {
+            background: white;
+            text-align: center;
+            padding: 30px 15px;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+        }
+        .footer h3 { margin: 0 0 10px; color: var(--primary); font-size: 18px; }
+        .footer p { margin: 5px 0; font-size: 13px; color: #666; }
+        .footer .copyright { margin-top: 20px; font-size: 12px; opacity: 0.6; }
 
-            .ips-header img {
-                height: 60px;
-            }
+        /* Mobile Fix */
+        @media (max-width: 600px) {
+            .header h2 { font-size: 22px; }
+            .container { padding: 15px; }
+            .download-btn { width: 100%; box-sizing: border-box; }
         }
     </style>
 </head>
 
 <body>
 
-<!-- ===== IPS ACADEMY HEADER ===== -->
-<div class="ips-header">
-    <img src="../ips-logo.jpeg" alt="IPS Academy Jhabua Logo">
-    <div class="ips-text">
-        <h1>IPS Academy</h1>
-        <h2>Jhabua Campus</h2>
-        <p>Class 12 Notes • CBSE Board</p>
+    <nav>
+        <div class="nav-content">
+            <img src="logo.png" alt="IPS Logo" class="nav-logo" onerror="this.style.display='none'">
+            <span class="brand-text">IPS Academy</span>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h2>Physics Notes (Class 12)</h2>
+        <p>CBSE Board • IPS Academy Jhabua</p>
     </div>
-</div>
 
-<h3>Class 12 – Physics Notes (CBSE)</h3>
+    <div class="content">
+        <div class="container">
+            
+            <a id="downloadBtn" class="download-btn" href="../cbse-pdf/physics-notes.pdf">
+                📥 Download PDF File
+            </a>
 
-<a id="downloadBtn" class="download-btn" href="../cbse-pdf/physics-notes.pdf">
-    📥 Download Physics Notes (PDF)
-</a>
+            <div id="pdf-container"></div>
+        </div>
+    </div>
 
-<!-- ===== PDF VIEWER ===== -->
-<div id="pdf-container"></div>
+    <div class="footer">
+        <h3>🏫 IPS Academy, Jhabua</h3>
+        <p>Bilidoz, Old Ranapur Road, Jhabua, MP</p>
+        <p>📞 +91 9926361161 | ✉ admissions.jhabua@ipsacademy.org</p>
+        <p class="copyright">© 2026 IPS Academy Jhabua</p>
+    </div>
 
-<script>
-    /* ===== PDF VIEWER ===== */
-    const pdfUrl = "../cbse-pdf/physics-notes.pdf";
+    <script>
+        /* ===== PDF VIEWER LOGIC ===== */
+        const pdfUrl = "../cbse-pdf/physics-notes.pdf";
 
-    pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
-        const container = document.getElementById("pdf-container");
+        pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+            const container = document.getElementById("pdf-container");
 
-        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-            pdf.getPage(pageNum).then(page => {
-                const viewport = page.getViewport({ scale: 1.5 });
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext("2d");
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(page => {
+                    const scale = 1.5;
+                    const viewport = page.getViewport({ scale: scale });
 
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                container.appendChild(canvas);
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
 
-                page.render({
-                    canvasContext: ctx,
-                    viewport: viewport
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    container.appendChild(canvas);
+
+                    page.render({
+                        canvasContext: ctx,
+                        viewport: viewport
+                    });
                 });
-            });
-        }
-    });
+            }
+        }).catch(err => {
+            console.error("PDF Load Error:", err);
+            document.getElementById('pdf-container').innerHTML = 
+                `<p style="color:red; padding:20px;">⚠️ Unable to preview PDF. Please use the download button above.</p>`;
+        });
 
-    /* ===== INSTAGRAM REDIRECT + DOWNLOAD ===== */
-    document.getElementById("downloadBtn").addEventListener("click", function (e) {
-        e.preventDefault();
+        /* ===== DOWNLOAD + INSTAGRAM LOGIC ===== */
+        document.getElementById("downloadBtn").addEventListener("click", function (e) {
+            e.preventDefault();
+            const pdfLink = this.href;
+            const instagramUrl = "https://www.instagram.com/ips_academy_jhabua";
 
-        const pdfLink = this.href;
-        const instagramUrl = "https://www.instagram.com/ips_academy_jhabua";
+            // Open Instagram in new tab
+            window.open(instagramUrl, "_blank");
 
-        window.open(instagramUrl, "_blank");
-
-        setTimeout(() => {
-            window.location.href = pdfLink;
-        }, 300);
-    });
-</script>
+            // Start Download after slight delay
+            setTimeout(() => {
+                window.location.href = pdfLink;
+            }, 500);
+        });
+    </script>
 
 </body>
 </html>
