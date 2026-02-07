@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | IPS Academy</title>
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1f3c88;       /* Academy Blue */
+            --accent: #ffcc00;        /* Academy Yellow */
+            --bg-color: #f4f7fa;      /* Light Grey Background */
+            --text-dark: #333333;
+            --card-white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- 1. CONSISTENT NAVBAR --- */
+        nav {
+            background: white;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky; /* Sticks to top on scroll */
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content { display: flex; align-items: center; gap: 12px; }
+        .nav-logo { height: 45px; width: auto; }
+        .brand-text { font-size: 20px; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+
+
+        /* --- 2. HEADER SECTION --- */
+        .header {
+            background: linear-gradient(135deg, #1f3c88 0%, #0d265e 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px 80px; /* Extra padding for overlap */
+            clip-path: ellipse(150% 100% at 50% 0%); /* Curved effect */
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.85;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* --- 3. CONTENT AREA --- */
+        .content {
+            flex: 1;
+            padding: 0 20px;
+            margin-top: -50px; /* Pulls cards up to overlap header */
+            position: relative;
+            z-index: 20;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        /* --- 4. NOTE CARDS --- */
+        .note-card {
+            background: var(--card-white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(31, 60, 136, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: slideUp 0.5s ease forwards;
+            opacity: 0;
+            border-left: 5px solid var(--accent);
+        }
+
+        .note-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(31, 60, 136, 0.12);
+        }
+
+        .note-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-box {
+            width: 45px;
+            height: 45px;
+            background: #f0f4ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .text-group h3 {
+            margin: 0 0 4px;
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .subject-badge {
+            font-size: 12px;
+            color: #666;
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* --- DOWNLOAD BUTTON --- */
+        .download-btn {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        .download-btn:hover {
+            background: #0d265e;
+            box-shadow: 0 4px 10px rgba(13, 38, 94, 0.3);
+        }
+
+        /* --- ANIMATION --- */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- LOADERS & FOOTER --- */
+        .loader, .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            color: #666;
+        }
+        .empty-icon { font-size: 40px; display: block; margin-bottom: 10px; }
+
+        .footer {
+            background: white;
+            text-align: center;
+            padding: 30px 15px;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+        }
+        .footer h3 { margin: 0 0 10px; color: var(--primary); font-size: 18px; }
+        .footer p { margin: 5px 0; font-size: 13px; color: #666; }
+        .footer .copyright { margin-top: 20px; font-size: 12px; opacity: 0.6; }
+
+        /* Mobile Fix */
+        @media (max-width: 480px) {
+            .note-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .download-btn { width: 100%; text-align: center; box-sizing: border-box; }
+            .note-info { width: 100%; }
+            .header h2 { font-size: 22px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-content">
+            <img src="logo.png" alt="IPS Logo" class="nav-logo" onerror="this.style.display='none'">
+            <!-- <span class="brand-text">IPS Academy</span> -->
+        </div>
+    </nav>
+
+    <div class="header">
+        <h2 id="streamTitle">Loading...</h2>
+        <p>Your Notes Repository</p>
+    </div>
+
+    <div class="content">
+        <div class="container" id="notesList">
+            <div class="loader">
+                Fetching Notes from Database... ⏳
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <h3>🏫 IPS Academy, Jhabua</h3>
+        <p>Bilidoz, Old Ranapur Road, Jhabua, MP</p>
+        <p>📞 +91 9926361161 | ✉ admissions.jhabua@ipsacademy.org</p>
+        <p class="copyright">© 2026 IPS Academy Jhabua</p>
+    </div>
+
+    <script>
+        // 🔴 PASTE YOUR DEPLOYED GOOGLE SCRIPT URL HERE
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTYasELyAZqZW2UlT_sxhhiPRnSIE9JxODZRl7VSgoZTEdIFTU4YnmorrgXXu2FKDE0g/exec";
+
+        // 1. Get Stream
+        const urlParams = new URLSearchParams(window.location.search);
+        const stream = urlParams.get('stream'); 
+        
+        // 2. Set Titles
+        const titles = { 
+            'pcmcbse': 'Mathematics Stream (PCM)', 
+            'pcbcbse': 'Biology Stream (PCB)', 
+            'commercecbse': 'Commerce Stream',
+            'artscbse': 'Arts Stream',
+            'agriculturecbse': 'Agriculture Stream'
+        };
+        document.getElementById('streamTitle').innerText = titles[stream] || "All Notes";
+
+        // 3. Helper: Get Emoji based on Subject
+        function getIcon(subject) {
+            const sub = subject.toLowerCase();
+            if(sub.includes('math')) return '📐';
+            if(sub.includes('phy')) return '⚛️';
+            if(sub.includes('chem')) return '🧪';
+            if(sub.includes('bio')) return '🧬';
+            if(sub.includes('eng')) return '📖';
+            if(sub.includes('hindi')) return '🕉️';
+            if(sub.includes('eco')) return '📊';
+            return '📄';
+        }
+
+        // 4. Fetch Data
+        fetch(SCRIPT_URL)
+        .then(res => res.json())
+        .then(notes => {
+            const list = document.getElementById('notesList');
+            list.innerHTML = ""; 
+
+            // Filter
+            const myNotes = notes.filter(n => n.stream === stream);
+
+            if(myNotes.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-icon">📂</span>
+                        <h3>No notes available yet.</h3>
+                        <p>Check back later, we are uploading!</p>
+                    </div>`;
+            } else {
+                myNotes.forEach((note, index) => {
+                    const btn = document.createElement('div');
+                    btn.className = 'note-card';
+                    
+                    // Stagger animation
+                    btn.style.animationDelay = `${index * 0.1}s`;
+
+                    btn.innerHTML = `
+                        <div class="note-info">
+                            <div class="icon-box">${getIcon(note.subject)}</div>
+                            <div class="text-group">
+                                <h3>${note.title}</h3>
+                                <span class="subject-badge">${note.subject}</span>
+                            </div>
+                        </div>
+                        <a href="${note.link}" class="download-btn" target="_blank">Download ⬇</a>
+                    `;
+                    list.appendChild(btn);
+                });
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('notesList').innerHTML = 
+                `<div class="loader" style="color:#d32f2f">⚠️ Error loading notes.<br>Please refresh the page.</div>`;
+        });
+    </script>
+
+</body>
+</html>
