@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>MP Board Student Registration</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP Board Student Registration</title>
     <link rel="icon" type="image/png" href="logo.png">
 
     <style>
@@ -10,6 +11,7 @@
         :root {
             --primary: #0d47a1;     /* Deep Blue */
             --light: #f4f6f8;       /* Light Grey Background */
+            --white: #ffffff;
             --dark: #222;
         }
 
@@ -21,7 +23,7 @@
             color: #333;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* Full viewport height */
+            min-height: 100vh;
         }
 
         /* --- 1. CONSISTENT NAVBAR --- */
@@ -32,46 +34,72 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            flex-shrink: 0; /* Prevents navbar from shrinking */
+            flex-shrink: 0;
             z-index: 100;
         }
         .logo-area { display: flex; align-items: center; gap: 10px; }
         .logo-img { height: 45px; width: auto; }
         .brand-text { font-size: 20px; font-weight: 700; color: var(--primary); text-transform: uppercase; }
 
-        /* --- 2. PAGE HEADER --- */
-        .header {
-            text-align: center;
+        /* --- 2. FORM CONTAINER --- */
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            background: white;
-            border-bottom: 1px solid #ddd;
-            flex-shrink: 0;
         }
 
-        .header h2 {
-            margin: 0 0 5px 0;
-            color: var(--primary);
-        }
-
-        .header p {
-            margin: 0;
-            font-size: 14px;
-            color: #666;
-        }
-
-        /* --- 3. GOOGLE FORM CONTAINER --- */
-        .iframe-container {
-            flex-grow: 1; /* Takes up all remaining space */
+        .form-card {
+            background: var(--white);
             width: 100%;
-            overflow: hidden; 
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--primary);
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h2 { margin: 0 0 10px 0; color: var(--primary); }
+        .header p { margin: 0; font-size: 14px; color: #666; }
+
+        /* --- 3. INPUT FIELDS --- */
+        .form-group { margin-bottom: 18px; }
+        
+        label {
+            display: block; font-weight: 600; font-size: 14px; 
+            margin-bottom: 8px; color: #333;
         }
+        
+        input, select {
+            width: 100%; padding: 12px;
+            border: 1px solid #ddd; border-radius: 6px;
+            font-size: 16px; background: #fafafa;
+            transition: all 0.3s; box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary); background: #fff;
+            outline: none; box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+        }
+
+        /* Validation Styling */
+        input:invalid:not(:placeholder-shown) {
+            border-color: #d32f2f;
+        }
+
+        /* --- 4. SUBMIT BUTTON --- */
+        .submit-btn {
+            width: 100%; padding: 14px; margin-top: 10px;
+            background-color: var(--primary); color: white;
+            border: none; border-radius: 6px;
+            font-size: 16px; font-weight: bold; cursor: pointer;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover { background-color: #002171; }
+        .submit-btn:disabled { background-color: #90caf9; cursor: wait; }
+
     </style>
 </head>
 
@@ -80,22 +108,103 @@
     <nav>
         <div class="logo-area">
             <img src="logo.png" alt="IPS Logo" class="logo-img" onerror="this.style.display='none'">
-            <span class="brand-text"></span>
         </div>
     </nav>
 
-    <!-- <div class="header">
-        <h2>MP Board Student Registration</h2>
-        <p>Please fill the form below to get MP Board notes.</p>
-    </div> -->
+    <div class="container">
+        <div class="form-card">
+            
+            <div class="header">
+                <h2>Student Registration</h2>
+                <p>Register to unlock Class 12th Notes</p>
+            </div>
 
-    <div class="iframe-container">
-        <iframe 
-            src="https://docs.google.com/forms/d/e/1FAIpQLSfOR_xzSDx-GzSbLYiWsz7Ll_mNpkM_-WelTzUyZ5tgSyugOw/viewform?embedded=true">
-            Loading...
-        </iframe>
+            <form id="regForm">
+                
+                <input type="hidden" name="action" value="register">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input 
+                        type="text" 
+                        name="Name" 
+                        id="fullNameInput"
+                        required 
+                        placeholder="Ex: Milan Singh"
+                        pattern="^\S+ \S+.*"
+                        title="Please enter both First Name and Last Name separated by a space."
+                        oninput="this.setCustomValidity('')" 
+                        oninvalid="this.setCustomValidity('Please enter your full name (First & Last Name)')"
+                    >
+                    <small style="color:#777; font-size:12px; margin-top:4px; display:block;">* First & Last Name required</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" name="Phone" required pattern="[0-9]{10}" placeholder="Ex: 9876543210">
+                </div>
+
+                <div class="form-group">
+                    <label>School Name</label>
+                    <input type="text" name="School" required placeholder="Ex: IPS Academy">
+                </div>
+
+                <div class="form-group">
+                    <label>Select Stream</label>
+                    <select name="Stream" id="streamSelect" required>
+                        <option value="" disabled selected>-- Select Your Subject --</option>
+                        <option value="pcmmp">Mathematics (PCM)</option>
+                        <option value="pcbmp">Biology (PCB)</option>
+                        <option value="commercemp">Commerce</option>
+                        <option value="artsmp">Arts</option>
+                        <option value="agriculturemp">Agriculture</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Unlock Notes 🔐</button>
+                <p id="status" style="text-align: center; margin-top: 15px; font-size: 14px; color: #666;"></p>
+
+            </form>
+        </div>
     </div>
+
+    <script>
+        // 🔴 PASTE YOUR WEB APP URL HERE
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTYasELyAZqZW2UlT_sxhhiPRnSIE9JxODZRl7VSgoZTEdIFTU4YnmorrgXXu2FKDE0g/exec";
+
+        const form = document.getElementById('regForm');
+        const btn = document.getElementById('submitBtn');
+        const status = document.getElementById('status');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            
+            // 1. Show Loading UI
+            btn.disabled = true;
+            btn.innerHTML = "Processing... ⏳";
+
+            // 2. Send Data to Google Sheet
+            fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form) })
+            .then(response => {
+                // 3. Success! Prepare Redirect
+                btn.innerHTML = "Success! Redirecting... 🚀";
+                btn.style.backgroundColor = "#2e7d32"; // Green success color
+                
+                const stream = document.getElementById('streamSelect').value;
+
+                setTimeout(() => {
+                    // 🔴 SMART REDIRECT: Sends them to Dashboard with their Stream Tag
+                    window.location.href = `mp-dashboard.html?stream=${stream}`;
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                status.innerText = "Error connecting to server. Please try again.";
+                btn.disabled = false;
+                btn.innerHTML = "Unlock Notes 🔐";
+            });
+        });
+    </script>
 
 </body>
 </html>
-
